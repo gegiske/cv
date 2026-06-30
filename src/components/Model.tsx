@@ -8,51 +8,13 @@ Source: https://sketchfab.com/3d-models/canon-at-1-retro-camera-9de66868d0f240e9
 Title: Canon AT-1 Retro Camera
 */
 
-import * as THREE from 'three'
 import { JSX } from 'react'
 import { useGLTF } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
-import { useLoader } from '@react-three/fiber'
-
-type GLTFResult = GLTF & {
-    nodes: {
-        ['#CAM0001_Body_#CAM0001_Textures_0']: THREE.Mesh
-    }
-    materials: {
-        CAM0001_Textures: THREE.MeshStandardMaterial
-    }
-    // animations: GLTFAction[]
-}
 
 export function Model(props: JSX.IntrinsicElements['group']) {
-    const gltf = useGLTF('/models/scene-transformed.glb')
 
-    const mesh = gltf.nodes['#CAM0001_Body_#CAM0001_Textures_0'] as THREE.Mesh
+    const gltf = useGLTF('/models/scene.gltf')
 
-    const [baseColorMap, metallicRoughnessMap, normalMap] = useLoader(THREE.TextureLoader, [
-        '/models/CAM0001_Textures_baseColor.png',
-        '/models/CAM0001_Textures_metallicRoughness.png',
-        '/models/CAM0001_Textures_normal.png'
-    ])
-
-    return (
-        <group {...props} dispose={null}>
-            <group name="Sketchfab_Scene">
-                <mesh
-                    name="#CAM0001_Body_#CAM0001_Textures_0"
-                    geometry={mesh.geometry}
-                    material={gltf.materials.CAM0001_Textures}
-                    rotation={[-Math.PI / 2, 0, 0]}
-                >
-                    <meshStandardMaterial
-                        map={baseColorMap}
-                        metalnessMap={metallicRoughnessMap}
-                        normalMap={normalMap}
-                    />
-
-                </mesh>
-            </group>
-        </group>
-    )
+    return <primitive object={gltf.scene} {...props} />
 }
-useGLTF.preload('/models/scene-transformed.glb')
+useGLTF.preload('/models/scene.gltf')
